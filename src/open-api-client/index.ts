@@ -30,7 +30,7 @@ OpenAPI.interceptors.response.use((res) => {
 	if (res.status === 401) {
 		localStorage.clear();
 
-		if (typeof window !== "undefined") {
+		if (typeof window !== undefined) {
 			window.location.href = "/login";
 		}
 
