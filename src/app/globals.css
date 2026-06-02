@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------- BASE THEME ---------------- */
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 260 30% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 260 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 260 30% 15%;
+
+    --primary: 264 44% 21%;
+    --primary-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --secondary: 260 20% 94%;
+    --secondary-foreground: 264 44% 21%;
+
+    --muted: 260 15% 95%;
+    --muted-foreground: 260 10% 45%;
+
+    --info: 221 83% 53%;
+    --info-foreground: 0 0% 100%;
+
+    --accent: 270 30% 92%;
+    --accent-foreground: 264 44% 21%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 260 15% 90%;
+    --input: 260 15% 90%;
+    --ring: 264 44% 21%;
+
+    --radius: 0.5rem;
+
+    /* sidebar */
+    --sidebar-background: 264 44% 21%;
+    --sidebar-foreground: 260 20% 90%;
+    --sidebar-primary: 270 60% 70%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 264 40% 28%;
+    --sidebar-accent-foreground: 260 20% 95%;
+    --sidebar-border: 264 35% 30%;
+    --sidebar-ring: 270 60% 70%;
+
+    /* status */
+    --success: 142 72% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 260 25% 8%;
+    --foreground: 260 10% 90%;
+
+    --card: 260 25% 12%;
+    --card-foreground: 260 10% 90%;
+
+    --popover: 260 25% 12%;
+    --popover-foreground: 260 10% 90%;
+
+    --primary: 270 60% 70%;
+    --primary-foreground: 260 25% 8%;
+
+    --secondary: 260 20% 18%;
+    --secondary-foreground: 260 10% 90%;
+
+    --muted: 260 20% 16%;
+    --muted-foreground: 260 10% 55%;
+
+    --accent: 264 30% 22%;
+    --accent-foreground: 260 10% 90%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 260 20% 20%;
+    --input: 260 20% 20%;
+    --ring: 270 60% 70%;
+  }
+
+  /* Tailwind v3 safe reset */
+  *,
+  ::before,
+  ::after {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* ---------------- UTILITIES ---------------- */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 9999px;
+  }
+}
