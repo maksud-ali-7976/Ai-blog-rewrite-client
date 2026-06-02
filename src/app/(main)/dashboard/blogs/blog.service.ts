@@ -108,15 +108,16 @@ const useBlogStore = create(
         delete: async (id: string) => {
           set({ loading: true });
           try {
-            await AsyncCall(
+            const req = await AsyncCall(
               BlogsService.blogDelete({
                 query: {
                   id: id,
                 },
               }),
             );
-            toast.success("Blog deleted successfully");
-            useBlogStore.getState().actions.list();
+
+            useBlogStore.getState().actions.paginate({});
+            return req
           } catch (error: any) {
             toast.error(error?.message || "failed to delete blog");
           } finally {
@@ -196,7 +197,7 @@ const useBlogStore = create(
               },
               requestBody: payload
             }));
-            
+
             if (id) {
               useBlogStore.getState().actions.detail(id);
             }

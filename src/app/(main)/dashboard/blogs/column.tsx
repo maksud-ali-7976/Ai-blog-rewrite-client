@@ -157,7 +157,7 @@ export const columns = [
             </Button>
           </Link>
 
-          <Popover open={confirmOpen} onOpenChange={setConfirmOpen}>
+          {/* <Popover open={confirmOpen} onOpenChange={setConfirmOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="ghost"
@@ -216,7 +216,7 @@ export const columns = [
                 </Button>
               </div>
             </PopoverContent>
-          </Popover>
+          </Popover> */}
         </div>
       );
     },

@@ -52,7 +52,7 @@ export default function BlogDetailsPage() {
 
   useEffect(() => {
     if (store.detail) {
-      setTitle(store.detail.original_title || "");
+      setTitle(store.detail.rewrite_title || store.detail.original_title || "");
       setAuthor(store.detail.author || "");
       setRewritten(store.detail.rewrite_content || "");
       setNotes(store.detail.review_notes || "");
@@ -61,38 +61,28 @@ export default function BlogDetailsPage() {
 
   useEffect(() => {
     if (!blogId) return;
-    if (!store.detail) return;
 
-    let interval: NodeJS.Timeout;
+    const status = store.detail?.gen_status;
+    const isProcessing =
+      status === BlogGenStatus.QUEUED ||
+      status === BlogGenStatus.SCRAPING ||
+      status === BlogGenStatus.PROCESSING;
 
-    const poll = async () => {
+    if (!isProcessing) return;
+
+    const interval = setInterval(async () => {
       const res = await store.actions.detail(blogId);
+      const newStatus = res?.data?.gen_status;
 
-      const status = res?.data?.gen_status;
-
-      const isDone =
-        status === BlogGenStatus.COMPLETED || status === BlogGenStatus.FAILED;
-
-      if (isDone) {
-        clearInterval(interval);
-        return;
-      }
-
-      if (status === BlogGenStatus.COMPLETED) {
+      if (newStatus === BlogGenStatus.COMPLETED) {
         toast.success("Blog ready ✨");
-      }
-
-      if (status === BlogGenStatus.FAILED) {
+      } else if (newStatus === BlogGenStatus.FAILED) {
         toast.error("Blog generation failed");
       }
-    };
-
-    poll();
-
-    interval = setInterval(poll, 4000);
+    }, 4000);
 
     return () => clearInterval(interval);
-  }, [blogId]);
+  }, [blogId, store.detail?.gen_status]);
 
   const saveChanges = async () => {
     try {
@@ -120,6 +110,13 @@ export default function BlogDetailsPage() {
     store.actions.publish(BlogStatus.PUBLISHED);
   };
 
+  const handleDelete = async () => {
+    const req = await store.actions.delete(blogId as any);
+
+    if (req?.status) {
+      router.push("/dashboard/blogs")
+    }
+  };
   if (!store.detail) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
@@ -274,10 +271,7 @@ export default function BlogDetailsPage() {
           <Button
             variant="destructive"
             className="ml-auto"
-            onClick={() => {
-              toast.success("Blog Deleted");
-              router.push("/dashboard/blogs");
-            }}
+            onClick={handleDelete}
           >
             <Trash2 className="mr-2 h-4 w-4" />
             Delete

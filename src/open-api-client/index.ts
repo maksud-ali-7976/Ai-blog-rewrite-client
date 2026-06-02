@@ -21,41 +21,28 @@ OpenAPI.TOKEN = async () => {
 OpenAPI.interceptors.request.use((...req) => {
 	// console.log("🚀 ~ OpenAPI.interceptors.request.use ~ req:", req)
 	if (typeof window != undefined && Object.keys(window).length) {
-		let tenants = localStorage.getItem("tenants") as any;
-		console.log("🚀 ~ tenants:", tenants);
 
-		if (tenants) {
-			let parsed = queryStringtoArray(tenants);
-			console.log("🚀 ~ parsed:", parsed);
-
-			if (Array.isArray(parsed)) {
-				if (req?.[0]?.headers) {
-					req[0].headers["tenants"] = tenants as any;
-				}
-			}
-		}
 	}
 	return req[0];
 });
 
 OpenAPI.interceptors.response.use((res) => {
+	if (res.status === 401) {
+		localStorage.clear();
+
+		if (typeof window !== "undefined") {
+			window.location.href = "/login";
+		}
+
+		throw new ApiError(401, "Session expired");
+	}
+
+	if (res.status === 422) {
+		throw new ApiError(res.status, res.data?.message);
+	}
+
 	if (!res.data?.status) {
-		res.statusText = res.data?.message;
 		throw new ApiError(res.status, res.data?.message);
-	}
-
-	if (res.status == 422) {
-		res.statusText = res.data?.message;
-		throw new ApiError(res.status, res.data?.message);
-	}
-
-	if (res.status == 401) {
-		// signOut();
-		console.log("leaving exiting the page");
-		// window.localStorage.clear();
-		setTimeout(() => {
-			// window.location.reload();
-		}, 500);
 	}
 
 	return res;
